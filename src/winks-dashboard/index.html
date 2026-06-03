@@ -4,12 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Winks Live Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Segoe UI', sans-serif;
@@ -25,21 +22,13 @@
             margin-bottom: 30px;
         }
 
-        header h1 {
-            font-size: 24px;
-            color: #ffffff;
-            letter-spacing: 1px;
-        }
-
-        header span {
-            font-size: 13px;
-            color: #888;
-        }
+        header h1 { font-size: 24px; color: #fff; letter-spacing: 1px; }
+        header span { font-size: 13px; color: #888; }
 
         .summary {
             display: flex;
             gap: 16px;
-            margin-bottom: 30px;
+            margin-bottom: 24px;
         }
 
         .card {
@@ -51,28 +40,18 @@
             border: 1px solid #2a2d3a;
         }
 
-        .card .count {
-            font-size: 36px;
-            font-weight: bold;
-            margin-bottom: 6px;
-        }
-
-        .card .label {
-            font-size: 13px;
-            color: #888;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .card.pass .count { color: #4caf50; }
-        .card.fail .count { color: #f44336; }
-        .card.info .count { color: #2196f3; }
+        .card .count { font-size: 36px; font-weight: bold; margin-bottom: 6px; }
+        .card .label { font-size: 13px; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+        .card.pass .count  { color: #4caf50; }
+        .card.fail .count  { color: #f44336; }
+        .card.info .count  { color: #2196f3; }
         .card.total .count { color: #ffffff; }
 
         .controls {
             display: flex;
             gap: 12px;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
         }
 
         button {
@@ -85,25 +64,39 @@
             letter-spacing: 0.5px;
         }
 
-        .btn-clear {
-            background: #f44336;
-            color: white;
+        .btn-clear   { background: #f44336; color: white; }
+        .btn-refresh { background: #2196f3; color: white; }
+        .btn-auto    { background: #4caf50; color: white; }
+        .btn-auto.off { background: #555; }
+        .btn-save    { background: #ff9800; color: white; }
+        .btn-clear-runs { background: #9c27b0; color: white; }
+
+        /* Charts row */
+        .charts-row {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 24px;
         }
 
-        .btn-refresh {
-            background: #2196f3;
-            color: white;
+        .chart-box {
+            background: #1a1d27;
+            border-radius: 10px;
+            border: 1px solid #2a2d3a;
+            padding: 20px;
+            flex: 1;
         }
 
-        .btn-auto {
-            background: #4caf50;
-            color: white;
+        .chart-box h3 {
+            font-size: 13px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
         }
 
-        .btn-auto.off {
-            background: #555;
-        }
+        .chart-box canvas { max-height: 220px; }
 
+        /* Log table */
         .log-container {
             background: #1a1d27;
             border-radius: 10px;
@@ -122,28 +115,30 @@
             justify-content: space-between;
         }
 
-        .log-list {
-            max-height: 500px;
-            overflow-y: auto;
-        }
+        .log-list { max-height: 400px; overflow-y: auto; }
 
         .log-entry {
             display: flex;
-            align-items: center;
-            gap: 16px;
+            flex-direction: column;
+            gap: 8px;
             padding: 12px 20px;
             border-bottom: 1px solid #22253a;
             font-size: 14px;
             animation: fadeIn 0.3s ease;
         }
 
+        .log-entry:last-child { border-bottom: none; }
+
+        .log-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            width: 100%;
+        }
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-4px); }
             to   { opacity: 1; transform: translateY(0); }
-        }
-
-        .log-entry:last-child {
-            border-bottom: none;
         }
 
         .badge {
@@ -156,22 +151,15 @@
             text-align: center;
         }
 
-        .badge.PASS  { background: #1b5e20; color: #4caf50; }
-        .badge.FAIL  { background: #b71c1c; color: #ef9a9a; }
-        .badge.INFO  { background: #0d47a1; color: #90caf9; }
-        .badge.START { background: #4a148c; color: #ce93d8; }
-        .badge.END   { background: #e65100; color: #ffcc80; }
+        .badge.PASS       { background: #1b5e20; color: #4caf50; }
+        .badge.FAIL       { background: #b71c1c; color: #ef9a9a; }
+        .badge.INFO       { background: #0d47a1; color: #90caf9; }
+        .badge.START      { background: #4a148c; color: #ce93d8; }
+        .badge.END        { background: #e65100; color: #ffcc80; }
         .badge.SCREENSHOT { background: #1a237e; color: #90caf9; }
 
-        .log-message {
-            flex: 1;
-            color: #ddd;
-        }
-
-        .log-time {
-            font-size: 12px;
-            color: #555;
-        }
+        .log-message { flex: 1; color: #ddd; }
+        .log-time    { font-size: 12px; color: #555; }
 
         .empty {
             padding: 40px;
@@ -195,6 +183,13 @@
             50%  { opacity: 0.3; }
             100% { opacity: 1; }
         }
+
+        .no-runs {
+            text-align: center;
+            color: #444;
+            font-size: 13px;
+            padding: 40px 0;
+        }
     </style>
 </head>
 <body>
@@ -204,6 +199,7 @@
     <span id="last-updated">Not yet updated</span>
 </header>
 
+<!-- Summary Cards -->
 <div class="summary">
     <div class="card total">
         <div class="count" id="count-total">0</div>
@@ -223,14 +219,31 @@
     </div>
 </div>
 
+<!-- Controls -->
 <div class="controls">
     <button class="btn-refresh" onclick="fetchLogs()">🔄 Refresh</button>
+    <button class="btn-save" onclick="saveRun()">💾 Save Run</button>
     <button class="btn-clear" onclick="clearLogs()">🗑 Clear Logs</button>
+    <button class="btn-clear-runs" onclick="clearRuns()">🗑 Clear History</button>
     <button class="btn-auto" id="auto-btn" onclick="toggleAuto()">
         <span class="live-dot"></span>Auto Refresh: ON
     </button>
 </div>
 
+<!-- Charts -->
+<div class="charts-row">
+    <div class="chart-box">
+        <h3>📈 Pass / Fail Trend</h3>
+        <canvas id="trendChart"></canvas>
+        <div class="no-runs" id="no-runs-msg">Run tests and click Save Run to see trend data</div>
+    </div>
+    <div class="chart-box">
+        <h3>🍩 Current Run Breakdown</h3>
+        <canvas id="donutChart"></canvas>
+    </div>
+</div>
+
+<!-- Log List -->
 <div class="log-container">
     <div class="log-header">
         <span>Test Execution Log</span>
@@ -245,13 +258,102 @@
     const API = 'http://localhost:3000';
     let autoRefresh = true;
     let interval = null;
+    let trendChart = null;
+    let donutChart = null;
 
+    // ── Trend Chart (line) ──────────────────────────────
+    function initTrendChart() {
+        const ctx = document.getElementById('trendChart').getContext('2d');
+        trendChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [
+                    {
+                        label: 'Pass',
+                        data: [],
+                        borderColor: '#4caf50',
+                        backgroundColor: 'rgba(76,175,80,0.1)',
+                        tension: 0.4,
+                        fill: true
+                    },
+                    {
+                        label: 'Fail',
+                        data: [],
+                        borderColor: '#f44336',
+                        backgroundColor: 'rgba(244,67,54,0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { labels: { color: '#aaa' } }
+                },
+                scales: {
+                    x: { ticks: { color: '#666' }, grid: { color: '#222' } },
+                    y: { ticks: { color: '#666' }, grid: { color: '#222' }, beginAtZero: true }
+                }
+            }
+        });
+    }
+
+    // ── Donut Chart ─────────────────────────────────────
+    function initDonutChart() {
+        const ctx = document.getElementById('donutChart').getContext('2d');
+        donutChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Pass', 'Fail', 'Info'],
+                datasets: [{
+                    data: [0, 0, 0],
+                    backgroundColor: ['#4caf50', '#f44336', '#2196f3'],
+                    borderColor: '#1a1d27',
+                    borderWidth: 3
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { labels: { color: '#aaa' } }
+                }
+            }
+        });
+    }
+
+    // ── Update trend chart from runs history ────────────
+    async function fetchRuns() {
+        try {
+            const res = await fetch(`${API}/runs`);
+            const runs = await res.json();
+
+            if (runs.length === 0) {
+                document.getElementById('no-runs-msg').style.display = 'block';
+                return;
+            }
+
+            document.getElementById('no-runs-msg').style.display = 'none';
+
+            trendChart.data.labels                 = runs.map(r => `Run ${r.runNumber}`);
+            trendChart.data.datasets[0].data       = runs.map(r => r.pass);
+            trendChart.data.datasets[1].data       = runs.map(r => r.fail);
+            trendChart.update();
+
+        } catch (err) {
+            console.error('Failed to fetch runs:', err);
+        }
+    }
+
+    // ── Fetch current logs ───────────────────────────────
     async function fetchLogs() {
         try {
             const res = await fetch(`${API}/logs`);
             const logs = await res.json();
             renderLogs(logs);
             updateSummary(logs);
+            updateDonut(logs);
             document.getElementById('last-updated').textContent =
                 'Last updated: ' + new Date().toLocaleTimeString();
         } catch (err) {
@@ -259,33 +361,35 @@
         }
     }
 
+    // ── Render log entries ───────────────────────────────
     function renderLogs(logs) {
-    const list = document.getElementById('log-list');
-    document.getElementById('log-count').textContent = logs.length + ' entries';
+        const list = document.getElementById('log-list');
+        document.getElementById('log-count').textContent = logs.length + ' entries';
 
-    if (logs.length === 0) {
-        list.innerHTML = '<div class="empty">No logs yet. Run your tests to see live updates.</div>';
-        return;
+        if (logs.length === 0) {
+            list.innerHTML = '<div class="empty">No logs yet. Run your tests to see live updates.</div>';
+            return;
+        }
+
+        list.innerHTML = logs.map(log => `
+            <div class="log-entry">
+                <div class="log-row">
+                    <span class="badge ${log.status}">${log.status}</span>
+                    <span class="log-message">${log.message}</span>
+                    <span class="log-time">${log.time || ''}</span>
+                </div>
+                ${log.image ? `
+                <img
+                    src="data:image/png;base64,${log.image}"
+                    style="max-width:100%;border-radius:6px;border:1px solid #333;"
+                />` : ''}
+            </div>
+        `).join('');
+
+        list.scrollTop = list.scrollHeight;
     }
 
-    list.innerHTML = logs.map(log => `
-        <div class="log-entry" style="flex-direction: column; align-items: flex-start; gap: 8px;">
-            <div style="display: flex; align-items: center; gap: 16px; width: 100%;">
-                <span class="badge ${log.status}">${log.status}</span>
-                <span class="log-message">${log.message}</span>
-                <span class="log-time">${log.time || ''}</span>
-            </div>
-            ${log.image ? `
-            <img 
-                src="data:image/png;base64,${log.image}" 
-                style="max-width: 100%; border-radius: 6px; border: 1px solid #333; margin-top: 4px;"
-            />` : ''}
-        </div>
-    `).join('');
-
-    list.scrollTop = list.scrollHeight;
-}
-
+    // ── Update summary cards ─────────────────────────────
     function updateSummary(logs) {
         document.getElementById('count-total').textContent = logs.length;
         document.getElementById('count-pass').textContent  = logs.filter(l => l.status === 'PASS').length;
@@ -293,15 +397,38 @@
         document.getElementById('count-info').textContent  = logs.filter(l => l.status === 'INFO').length;
     }
 
-    async function clearLogs() {
-        await fetch(`${API}/logs`, { method: 'DELETE' });
-        fetchLogs();
+    // ── Update donut chart ───────────────────────────────
+    function updateDonut(logs) {
+        const pass = logs.filter(l => l.status === 'PASS').length;
+        const fail = logs.filter(l => l.status === 'FAIL').length;
+        const info = logs.filter(l => l.status === 'INFO').length;
+        donutChart.data.datasets[0].data = [pass, fail, info];
+        donutChart.update();
     }
 
+    // ── Save current run to history ──────────────────────
+    async function saveRun() {
+        await fetch(`${API}/logs`, { method: 'DELETE' });
+        await fetchRuns();
+        await fetchLogs();
+    }
+
+    // ── Clear current logs only ──────────────────────────
+    async function clearLogs() {
+        await fetch(`${API}/logs`, { method: 'DELETE' });
+        await fetchLogs();
+    }
+
+    // ── Clear run history ────────────────────────────────
+    async function clearRuns() {
+        await fetch(`${API}/runs`, { method: 'DELETE' });
+        await fetchRuns();
+    }
+
+    // ── Auto refresh toggle ──────────────────────────────
     function toggleAuto() {
         autoRefresh = !autoRefresh;
         const btn = document.getElementById('auto-btn');
-
         if (autoRefresh) {
             btn.className = 'btn-auto';
             btn.innerHTML = '<span class="live-dot"></span>Auto Refresh: ON';
@@ -315,11 +442,17 @@
 
     function startInterval() {
         clearInterval(interval);
-        interval = setInterval(fetchLogs, 2000);
+        interval = setInterval(() => {
+            fetchLogs();
+            fetchRuns();
+        }, 2000);
     }
 
-    // Start on load
+    // ── Init ─────────────────────────────────────────────
+    initTrendChart();
+    initDonutChart();
     fetchLogs();
+    fetchRuns();
     startInterval();
 </script>
 
