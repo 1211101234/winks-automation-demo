@@ -1,0 +1,44 @@
+[
+  {
+    "message": "Test Started",
+    "status": "START",
+    "timestamp": "1780462787056",
+    "time": "12:59:47 pm"
+  },
+  {
+    "message": "Navigating to application",
+    "status": "INFO",
+    "timestamp": "1780462787066",
+    "time": "12:59:47 pm"
+  },
+  {
+    "message": "User login successful",
+    "status": "PASS",
+    "timestamp": "1780462788980",
+    "time": "12:59:48 pm"
+  },
+  {
+    "message": "Product added to cart",
+    "status": "PASS",
+    "timestamp": "1780462788982",
+    "time": "12:59:48 pm"
+  },
+  {
+    "message": "Proceeding to payment",
+    "status": "INFO",
+    "timestamp": "1780462788985",
+    "time": "12:59:48 pm"
+  },
+  {
+    "message": "Order confirmed",
+    "status": "PASS",
+    "timestamp": "1780462788987",
+    "time": "12:59:48 pm"
+  },
+  {
+    "message": "Test Finished",
+    "status": "END",
+    "timestamp": "1780462789145",
+    "time": "12:59:49 pm"
+  }
+]

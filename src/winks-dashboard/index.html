@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Winks Live Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #0f1117;
+            color: #e0e0e0;
+            padding: 30px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 24px;
+            color: #ffffff;
+            letter-spacing: 1px;
+        }
+
+        header span {
+            font-size: 13px;
+            color: #888;
+        }
+
+        .summary {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            flex: 1;
+            background: #1a1d27;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid #2a2d3a;
+        }
+
+        .card .count {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        .card .label {
+            font-size: 13px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .card.pass .count { color: #4caf50; }
+        .card.fail .count { color: #f44336; }
+        .card.info .count { color: #2196f3; }
+        .card.total .count { color: #ffffff; }
+
+        .controls {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-clear {
+            background: #f44336;
+            color: white;
+        }
+
+        .btn-refresh {
+            background: #2196f3;
+            color: white;
+        }
+
+        .btn-auto {
+            background: #4caf50;
+            color: white;
+        }
+
+        .btn-auto.off {
+            background: #555;
+        }
+
+        .log-container {
+            background: #1a1d27;
+            border-radius: 10px;
+            border: 1px solid #2a2d3a;
+            overflow: hidden;
+        }
+
+        .log-header {
+            padding: 14px 20px;
+            background: #22253a;
+            font-size: 13px;
+            color: #aaa;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .log-list {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .log-entry {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px 20px;
+            border-bottom: 1px solid #22253a;
+            font-size: 14px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-4px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .log-entry:last-child {
+            border-bottom: none;
+        }
+
+        .badge {
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .badge.PASS  { background: #1b5e20; color: #4caf50; }
+        .badge.FAIL  { background: #b71c1c; color: #ef9a9a; }
+        .badge.INFO  { background: #0d47a1; color: #90caf9; }
+        .badge.START { background: #4a148c; color: #ce93d8; }
+        .badge.END   { background: #e65100; color: #ffcc80; }
+
+        .log-message {
+            flex: 1;
+            color: #ddd;
+        }
+
+        .log-time {
+            font-size: 12px;
+            color: #555;
+        }
+
+        .empty {
+            padding: 40px;
+            text-align: center;
+            color: #444;
+            font-size: 14px;
+        }
+
+        .live-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #4caf50;
+            border-radius: 50%;
+            margin-right: 6px;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%   { opacity: 1; }
+            50%  { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>⚡ Winks Live Dashboard</h1>
+    <span id="last-updated">Not yet updated</span>
+</header>
+
+<div class="summary">
+    <div class="card total">
+        <div class="count" id="count-total">0</div>
+        <div class="label">Total</div>
+    </div>
+    <div class="card pass">
+        <div class="count" id="count-pass">0</div>
+        <div class="label">Passed</div>
+    </div>
+    <div class="card fail">
+        <div class="count" id="count-fail">0</div>
+        <div class="label">Failed</div>
+    </div>
+    <div class="card info">
+        <div class="count" id="count-info">0</div>
+        <div class="label">Info</div>
+    </div>
+</div>
+
+<div class="controls">
+    <button class="btn-refresh" onclick="fetchLogs()">🔄 Refresh</button>
+    <button class="btn-clear" onclick="clearLogs()">🗑 Clear Logs</button>
+    <button class="btn-auto" id="auto-btn" onclick="toggleAuto()">
+        <span class="live-dot"></span>Auto Refresh: ON
+    </button>
+</div>
+
+<div class="log-container">
+    <div class="log-header">
+        <span>Test Execution Log</span>
+        <span id="log-count">0 entries</span>
+    </div>
+    <div class="log-list" id="log-list">
+        <div class="empty">No logs yet. Run your tests to see live updates.</div>
+    </div>
+</div>
+
+<script>
+    const API = 'http://localhost:3000';
+    let autoRefresh = true;
+    let interval = null;
+
+    async function fetchLogs() {
+        try {
+            const res = await fetch(`${API}/logs`);
+            const logs = await res.json();
+            renderLogs(logs);
+            updateSummary(logs);
+            document.getElementById('last-updated').textContent =
+                'Last updated: ' + new Date().toLocaleTimeString();
+        } catch (err) {
+            console.error('Failed to fetch logs:', err);
+        }
+    }
+
+    function renderLogs(logs) {
+        const list = document.getElementById('log-list');
+        document.getElementById('log-count').textContent = logs.length + ' entries';
+
+        if (logs.length === 0) {
+            list.innerHTML = '<div class="empty">No logs yet. Run your tests to see live updates.</div>';
+            return;
+        }
+
+        list.innerHTML = logs.map(log => `
+            <div class="log-entry">
+                <span class="badge ${log.status}">${log.status}</span>
+                <span class="log-message">${log.message}</span>
+                <span class="log-time">${log.time || ''}</span>
+            </div>
+        `).join('');
+
+        list.scrollTop = list.scrollHeight;
+    }
+
+    function updateSummary(logs) {
+        document.getElementById('count-total').textContent = logs.length;
+        document.getElementById('count-pass').textContent  = logs.filter(l => l.status === 'PASS').length;
+        document.getElementById('count-fail').textContent  = logs.filter(l => l.status === 'FAIL').length;
+        document.getElementById('count-info').textContent  = logs.filter(l => l.status === 'INFO').length;
+    }
+
+    async function clearLogs() {
+        await fetch(`${API}/logs`, { method: 'DELETE' });
+        fetchLogs();
+    }
+
+    function toggleAuto() {
+        autoRefresh = !autoRefresh;
+        const btn = document.getElementById('auto-btn');
+
+        if (autoRefresh) {
+            btn.className = 'btn-auto';
+            btn.innerHTML = '<span class="live-dot"></span>Auto Refresh: ON';
+            startInterval();
+        } else {
+            btn.className = 'btn-auto off';
+            btn.innerHTML = 'Auto Refresh: OFF';
+            clearInterval(interval);
+        }
+    }
+
+    function startInterval() {
+        clearInterval(interval);
+        interval = setInterval(fetchLogs, 2000);
+    }
+
+    // Start on load
+    fetchLogs();
+    startInterval();
+</script>
+
+</body>
+</html>

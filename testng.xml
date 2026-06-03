@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+
+<suite name="Winks Demo Suite" verbose="1">
+    <test name="Checkout Tests">
+        <parameter name="simulateFailure" value="false" />
+        <classes>
+            <class name="tests.CheckoutTest" />
+        </classes>
+    </test>
+</suite>
