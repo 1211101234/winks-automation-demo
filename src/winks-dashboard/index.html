@@ -161,6 +161,7 @@
         .badge.INFO  { background: #0d47a1; color: #90caf9; }
         .badge.START { background: #4a148c; color: #ce93d8; }
         .badge.END   { background: #e65100; color: #ffcc80; }
+        .badge.SCREENSHOT { background: #1a237e; color: #90caf9; }
 
         .log-message {
             flex: 1;
@@ -259,24 +260,31 @@
     }
 
     function renderLogs(logs) {
-        const list = document.getElementById('log-list');
-        document.getElementById('log-count').textContent = logs.length + ' entries';
+    const list = document.getElementById('log-list');
+    document.getElementById('log-count').textContent = logs.length + ' entries';
 
-        if (logs.length === 0) {
-            list.innerHTML = '<div class="empty">No logs yet. Run your tests to see live updates.</div>';
-            return;
-        }
+    if (logs.length === 0) {
+        list.innerHTML = '<div class="empty">No logs yet. Run your tests to see live updates.</div>';
+        return;
+    }
 
-        list.innerHTML = logs.map(log => `
-            <div class="log-entry">
+    list.innerHTML = logs.map(log => `
+        <div class="log-entry" style="flex-direction: column; align-items: flex-start; gap: 8px;">
+            <div style="display: flex; align-items: center; gap: 16px; width: 100%;">
                 <span class="badge ${log.status}">${log.status}</span>
                 <span class="log-message">${log.message}</span>
                 <span class="log-time">${log.time || ''}</span>
             </div>
-        `).join('');
+            ${log.image ? `
+            <img 
+                src="data:image/png;base64,${log.image}" 
+                style="max-width: 100%; border-radius: 6px; border: 1px solid #333; margin-top: 4px;"
+            />` : ''}
+        </div>
+    `).join('');
 
-        list.scrollTop = list.scrollHeight;
-    }
+    list.scrollTop = list.scrollHeight;
+}
 
     function updateSummary(logs) {
         document.getElementById('count-total').textContent = logs.length;

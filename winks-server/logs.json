@@ -1,44 +1,296 @@
 [
   {
-    "message": "Test Started",
+    "message": "API test started",
     "status": "START",
-    "timestamp": "1780462787056",
-    "time": "12:59:47 pm"
+    "timestamp": 1780467423589,
+    "time": "2:17:03 pm",
+    "image": null
   },
   {
-    "message": "Navigating to application",
+    "message": "GET /users called",
     "status": "INFO",
-    "timestamp": "1780462787066",
-    "time": "12:59:47 pm"
+    "timestamp": 1780467423993,
+    "time": "2:17:03 pm",
+    "image": null
+  },
+  {
+    "message": "Status 200 validated",
+    "status": "PASS",
+    "timestamp": 1780467424063,
+    "time": "2:17:04 pm",
+    "image": null
+  },
+  {
+    "message": "Returned 10 users",
+    "status": "PASS",
+    "timestamp": 1780467424152,
+    "time": "2:17:04 pm",
+    "image": null
+  },
+  {
+    "message": "API GET test finished",
+    "status": "END",
+    "timestamp": 1780467424206,
+    "time": "2:17:04 pm",
+    "image": null
+  },
+  {
+    "message": "API POST test started",
+    "status": "START",
+    "timestamp": 1780467424313,
+    "time": "2:17:04 pm",
+    "image": null
+  },
+  {
+    "message": "Login test started",
+    "status": "START",
+    "timestamp": 1780467424924,
+    "time": "2:17:04 pm",
+    "image": null
+  },
+  {
+    "message": "Test Started",
+    "status": "START",
+    "timestamp": 1780467425001,
+    "time": "2:17:04 pm",
+    "image": null
+  },
+  {
+    "message": "POST /posts called",
+    "status": "INFO",
+    "timestamp": 1780467425366,
+    "time": "2:17:05 pm",
+    "image": null
+  },
+  {
+    "message": "Status 201 validated",
+    "status": "PASS",
+    "timestamp": 1780467425385,
+    "time": "2:17:05 pm",
+    "image": null
+  },
+  {
+    "message": "Post created with ID: 101",
+    "status": "PASS",
+    "timestamp": 1780467425391,
+    "time": "2:17:05 pm",
+    "image": null
+  },
+  {
+    "message": "API POST test finished",
+    "status": "END",
+    "timestamp": 1780467425395,
+    "time": "2:17:05 pm",
+    "image": null
+  },
+  {
+    "message": "API single post test started",
+    "status": "START",
+    "timestamp": 1780467425512,
+    "time": "2:17:05 pm",
+    "image": null
+  },
+  {
+    "message": "GET /posts/1 called",
+    "status": "INFO",
+    "timestamp": 1780467425666,
+    "time": "2:17:05 pm",
+    "image": null
+  },
+  {
+    "message": "Post title: sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
+    "status": "INFO",
+    "timestamp": 1780467425685,
+    "time": "2:17:05 pm",
+    "image": null
+  },
+  {
+    "message": "Single post validation passed",
+    "status": "PASS",
+    "timestamp": 1780467425688,
+    "time": "2:17:05 pm",
+    "image": null
+  },
+  {
+    "message": "API single post test finished",
+    "status": "END",
+    "timestamp": 1780467425722,
+    "time": "2:17:05 pm",
+    "image": null
+  },
+  {
+    "message": "Search test started",
+    "status": "START",
+    "timestamp": 1780467427112,
+    "time": "2:17:07 pm",
+    "image": null
+  },
+  {
+    "message": "Opened application",
+    "status": "INFO",
+    "timestamp": 1780467428042,
+    "time": "2:17:08 pm",
+    "image": null
   },
   {
     "message": "User login successful",
     "status": "PASS",
-    "timestamp": "1780462788980",
-    "time": "12:59:48 pm"
+    "timestamp": 1780467428053,
+    "time": "2:17:08 pm",
+    "image": null
   },
   {
     "message": "Product added to cart",
     "status": "PASS",
-    "timestamp": "1780462788982",
-    "time": "12:59:48 pm"
+    "timestamp": 1780467428057,
+    "time": "2:17:08 pm",
+    "image": null
   },
   {
     "message": "Proceeding to payment",
     "status": "INFO",
-    "timestamp": "1780462788985",
-    "time": "12:59:48 pm"
+    "timestamp": 1780467428067,
+    "time": "2:17:08 pm",
+    "image": null
   },
   {
     "message": "Order confirmed",
     "status": "PASS",
-    "timestamp": "1780462788987",
-    "time": "12:59:48 pm"
+    "timestamp": 1780467428069,
+    "time": "2:17:08 pm",
+    "image": null
   },
   {
     "message": "Test Finished",
     "status": "END",
-    "timestamp": "1780462789145",
-    "time": "12:59:49 pm"
+    "timestamp": 1780467428073,
+    "time": "2:17:08 pm",
+    "image": null
+  },
+  {
+    "message": "Opened login page",
+    "status": "INFO",
+    "timestamp": 1780467429977,
+    "time": "2:17:09 pm",
+    "image": null
+  },
+  {
+    "message": "Username entered",
+    "status": "INFO",
+    "timestamp": 1780467430050,
+    "time": "2:17:10 pm",
+    "image": null
+  },
+  {
+    "message": "Password entered",
+    "status": "INFO",
+    "timestamp": 1780467430078,
+    "time": "2:17:10 pm",
+    "image": null
+  },
+  {
+    "message": "Opened search page",
+    "status": "INFO",
+    "timestamp": 1780467432847,
+    "time": "2:17:12 pm",
+    "image": null
+  },
+  {
+    "message": "Page loaded successfully",
+    "status": "PASS",
+    "timestamp": 1780467432889,
+    "time": "2:17:12 pm",
+    "image": null
+  },
+  {
+    "message": "Found 20 books on page",
+    "status": "PASS",
+    "timestamp": 1780467432899,
+    "time": "2:17:12 pm",
+    "image": null
+  },
+  {
+    "message": "Opened book: A Light in the Attic",
+    "status": "INFO",
+    "timestamp": 1780467433275,
+    "time": "2:17:13 pm",
+    "image": null
+  },
+  {
+    "message": "Book detail page loaded",
+    "status": "PASS",
+    "timestamp": 1780467433297,
+    "time": "2:17:13 pm",
+    "image": null
+  },
+  {
+    "message": "Search test finished",
+    "status": "END",
+    "timestamp": 1780467433300,
+    "time": "2:17:13 pm",
+    "image": null
+  },
+  {
+    "message": "Login button clicked",
+    "status": "INFO",
+    "timestamp": 1780467435580,
+    "time": "2:17:15 pm",
+    "image": null
+  },
+  {
+    "message": "Login successful - landing page visible",
+    "status": "PASS",
+    "timestamp": 1780467435620,
+    "time": "2:17:15 pm",
+    "image": null
+  },
+  {
+    "message": "URL validation passed",
+    "status": "PASS",
+    "timestamp": 1780467435623,
+    "time": "2:17:15 pm",
+    "image": null
+  },
+  {
+    "message": "Login test finished",
+    "status": "END",
+    "timestamp": 1780467435629,
+    "time": "2:17:15 pm",
+    "image": null
+  },
+  {
+    "message": "Invalid login test started",
+    "status": "START",
+    "timestamp": 1780467436487,
+    "time": "2:17:16 pm",
+    "image": null
+  },
+  {
+    "message": "Opened login page",
+    "status": "INFO",
+    "timestamp": 1780467440534,
+    "time": "2:17:20 pm",
+    "image": null
+  },
+  {
+    "message": "Invalid credentials submitted",
+    "status": "INFO",
+    "timestamp": 1780467440618,
+    "time": "2:17:20 pm",
+    "image": null
+  },
+  {
+    "message": "Error message displayed correctly",
+    "status": "PASS",
+    "timestamp": 1780467440636,
+    "time": "2:17:20 pm",
+    "image": null
+  },
+  {
+    "message": "Invalid login test finished",
+    "status": "END",
+    "timestamp": 1780467440641,
+    "time": "2:17:20 pm",
+    "image": null
   }
 ]
